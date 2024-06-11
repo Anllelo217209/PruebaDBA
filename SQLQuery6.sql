@@ -1,0 +1,215 @@
+USE [master]
+GO
+/****** Object:  Database [BD_Hospital]    Script Date: 11/06/2024 16:59:25 ******/
+CREATE DATABASE [BD_Hospital]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'BD_Hospital', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\BD_Hospital.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'BD_Hospital_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\BD_Hospital_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [BD_Hospital] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [BD_Hospital].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [BD_Hospital] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [BD_Hospital] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [BD_Hospital] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [BD_Hospital] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [BD_Hospital] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [BD_Hospital] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [BD_Hospital] SET  MULTI_USER 
+GO
+ALTER DATABASE [BD_Hospital] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [BD_Hospital] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [BD_Hospital] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [BD_Hospital] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [BD_Hospital] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [BD_Hospital] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [BD_Hospital] SET QUERY_STORE = OFF
+GO
+USE [BD_Hospital]
+GO
+/****** Object:  Table [dbo].[HistoriaClinica]    Script Date: 11/06/2024 16:59:25 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[HistoriaClinica](
+	[HistoriaClinicaID] [int] NOT NULL,
+	[PacienteID] [int] NOT NULL,
+	[FechaApertura] [date] NOT NULL,
+	[DiagnosticoInicial] [text] NULL,
+	[FechaUltimaVisita] [date] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[HistoriaClinicaID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Medico]    Script Date: 11/06/2024 16:59:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Medico](
+	[MedicoID] [int] NOT NULL,
+	[Nombre] [varchar](100) NOT NULL,
+	[Apellido] [varchar](100) NOT NULL,
+	[Especialidad] [varchar](50) NULL,
+	[NumeroLicencia] [varchar](50) NULL,
+	[Telefono] [varchar](50) NULL,
+	[CorreoElectronico] [varchar](100) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MedicoID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Paciente]    Script Date: 11/06/2024 16:59:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Paciente](
+	[PacienteID] [int] NOT NULL,
+	[Nombre] [varchar](100) NOT NULL,
+	[Apellido] [varchar](100) NOT NULL,
+	[FechaNacimiento] [date] NULL,
+	[Genero] [char](1) NULL,
+	[Direccion] [varchar](200) NULL,
+	[Telefono] [varchar](50) NULL,
+	[CorreoElectronico] [varchar](100) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PacienteID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Visita]    Script Date: 11/06/2024 16:59:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Visita](
+	[VisitaID] [int] NOT NULL,
+	[HistoriaClinicaID] [int] NOT NULL,
+	[MedicoID] [int] NOT NULL,
+	[FechaVisita] [date] NOT NULL,
+	[MotivoVisita] [text] NULL,
+	[Diagnostico] [text] NULL,
+	[Tratamiento] [text] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[VisitaID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[HistoriaClinica]  WITH CHECK ADD FOREIGN KEY([PacienteID])
+REFERENCES [dbo].[Paciente] ([PacienteID])
+GO
+ALTER TABLE [dbo].[Visita]  WITH CHECK ADD FOREIGN KEY([HistoriaClinicaID])
+REFERENCES [dbo].[HistoriaClinica] ([HistoriaClinicaID])
+GO
+ALTER TABLE [dbo].[Visita]  WITH CHECK ADD FOREIGN KEY([MedicoID])
+REFERENCES [dbo].[Medico] ([MedicoID])
+GO
+/****** Object:  StoredProcedure [dbo].[RegitrarNuevaVisita]    Script Date: 11/06/2024 16:59:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[RegitrarNuevaVisita]
+@PacienteID INT,
+@MedicoID INT,
+@FechaVisitaID DATE,
+@Diagnostico TEXT,
+@Tratamiento TEXT
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @HistoriaClinicaID INT;
+
+-- Aquí obtengo la ID del paciente --
+
+	SELECT TOP 1 @HistoriaClinicaID = HistoriaClinicaID
+	FROM HistoriaClinica
+	WHERE PacienteID = @PacienteID;
+
+-- Aquí verifico si está la HC --
+	
+	IF @HistoriaClinicaID IS NULL
+	BEGIN
+	RAISERROR ('No se encuentra la HC', 16, 1);
+	
+	END 
+	
+	ELSE
+	
+	BEGIN
+
+-- Aqui inserto la nueva visita en la tabla Visita --
+
+		INSERT INTO Visita(HistoriaClinicaID, MedicoID, FechaVisita, MotivoVisita, Diagnostico, Tratamiento)
+		VALUES (@HistoriaClinicaID, @MedicoID, @FechaVisitaID, '' , @Diagnostico, @Tratamiento);
+
+	END
+
+END;
+GO
+USE [master]
+GO
+ALTER DATABASE [BD_Hospital] SET  READ_WRITE 
+GO
